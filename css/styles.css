@@ -226,8 +226,11 @@ header .container {
     animation: gradientShift 15s ease infinite;
     color: var(--white);
     position: relative;
-    padding: 140px 0 80px;
+    padding: 0; /* Remove padding */
     overflow: hidden;
+    min-height: 100vh; /* Make it full viewport height */
+    display: flex;
+    align-items: center;
 }
 
 /* Hero decoration elements */
@@ -362,6 +365,7 @@ header .container {
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     align-items: center;
+    padding-top: 80px; /* Add space for the navbar */
 }
 
 .hero h1 {
@@ -1159,9 +1163,13 @@ footer p {
 
 /* Media Queries for Responsive Design */
 @media (max-width: 992px) {
+    .hero {
+        min-height: 100vh; /* Keep full height on mobile */
+    }
+    
     .hero .container {
-        grid-template-columns: 1fr;
-        gap: 60px;
+        padding-top: 100px; /* Increase top padding on mobile */
+        padding-bottom: 50px; /* Add some bottom padding */
     }
 
     .hero-image {
