@@ -134,8 +134,8 @@ section {
 
 .btn-outline {
     background-color: transparent;
-    color: var(--primary);
-    border: 2px solid var(--primary);
+    color: var(--white);
+    border: 2px solid var(--white);
     box-shadow: 0 0 0 rgba(23, 85, 193, 0);
     transition: var(--transition-medium);
 }
@@ -146,10 +146,16 @@ section {
     box-shadow: var(--shadow-sm);
 }
 
+nav .btn {
+    padding: 8px 20px; /* Reduced from 10px 24px */
+    font-size: 14px; /* Slightly smaller font */
+    margin: 0 8px; /* Add some margin on the sides */
+}
+
 /* Header Styles */
 header {
-    background-color: rgba(255, 255, 255, 0.98);
-    padding: 20px 0;
+    background-color: rgba(37, 88, 181, 0.1);
+    padding: 12px 0; /* Reduced from 12px to 8px to make it shorter */
     position: fixed;
     top: 0;
     left: 0;
@@ -157,12 +163,19 @@ header {
     z-index: 1000;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     backdrop-filter: blur(10px);
-    transition: var(--transition-medium);
+    transition: transform 0.3s ease, padding 0.3s ease, background-color 0.3s ease;
+    transform: translateY(0);
 }
 
 header.scrolled {
-    padding: 15px 0;
-    background-color: rgba(255, 255, 255, 0.95);
+    padding: 12px 0; /* Reduced from 8px to 6px */
+    background-color: rgba(37, 88, 181, 0.9);
+}
+
+nav {
+    display: flex;
+    align-items: center; /* This centers items vertically */
+    /* height: 75%; Take full height of header */
 }
 
 header .container {
@@ -185,11 +198,11 @@ header .container {
 .logo i {
     font-size: 28px;
     color: var(--accent);
-    background: linear-gradient(135deg, var(--primary), var(--accent));
+    background: linear-gradient(135deg, var(--accent), var(--white));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 4px rgba(23, 85, 193, 0.2));
+    filter: drop-shadow(0 2px 4px rgba(255, 123, 41, 0.3));
     transition: var(--transition-medium);
 }
 
@@ -201,10 +214,8 @@ header .container {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 0;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--white);
+    -webkit-text-fill-color: var(--white);
     letter-spacing: -0.02em;
 }
 
@@ -215,7 +226,7 @@ header .container {
     animation: gradientShift 15s ease infinite;
     color: var(--white);
     position: relative;
-    padding: 160px 0 80px;
+    padding: 140px 0 80px;
     overflow: hidden;
 }
 
@@ -330,12 +341,12 @@ header .container {
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-    transform: perspective(1000px) rotateX(5deg);
+    transform: perspective(1000px) rotateX(0deg) translateY(-10px);
     transition: var(--transition-medium);
 }
 
 .dashboard-wrapper:hover {
-    transform: perspective(1000px) rotateX(0deg) translateY(-10px);
+    transform: perspective(1000px) rotateX(5deg) translateY(0);
 }
 
 @keyframes gradientShift {
@@ -423,6 +434,7 @@ header .container {
     font-size: 0.85rem;
     opacity: 0.8;
     margin-top: 14px;
+    margin-bottom: 0px;
     text-align: center;
     font-weight: 500;
 }
@@ -760,7 +772,8 @@ header .container {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    display: inline-block;
+    display: block;
+    width: 100%;
 }
 
 .faq-list {

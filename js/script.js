@@ -4,17 +4,45 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Header scroll behavior
-    const header = document.querySelector('header');
+    // // Header scroll behavior
+    // const header = document.querySelector('header');
     
+    // window.addEventListener('scroll', function() {
+    //     if (window.scrollY > 10) {
+    //         header.classList.add('scrolled');
+    //     } else {
+    //         header.classList.remove('scrolled');
+    //     }
+    // });
+    
+    // Variables to track scroll position
+    let lastScrollTop = 0;
+    const header = document.querySelector('header');
+    const headerHeight = header.offsetHeight;
+
+    // Handle scroll events
     window.addEventListener('scroll', function() {
-        if (window.scrollY > 10) {
+        const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Add scrolled class when not at the top
+        if (currentScrollTop > 10) {
             header.classList.add('scrolled');
         } else {
             header.classList.remove('scrolled');
         }
-    });
-    
+        
+        // Hide header when scrolling down, show when scrolling up
+        if (currentScrollTop > lastScrollTop && currentScrollTop > headerHeight) {
+            // Scrolling down
+            header.style.transform = 'translateY(-100%)';
+        } else {
+            // Scrolling up
+            header.style.transform = 'translateY(0)';
+        }
+        
+        lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For mobile or negative scrolling
+    }, false);
+
     // Elements to animate on page load with specified animations
     const elementsWithAnimation = [
         { selector: '.hero-content', animation: 'slide-from-left' },
@@ -254,17 +282,15 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             .success-icon {
                 font-size: 60px;
-                color: var(--success);
+                color: var(--white);
                 margin-bottom: 20px;
                 animation: pulse 2s infinite;
             }
             .success-message h3 {
                 font-size: 1.8rem;
                 margin-bottom: 12px;
-                background: linear-gradient(135deg, var(--primary), var(--accent));
-                -webkit-background-clip: text;
-                background-clip: text;
-                -webkit-text-fill-color: transparent;
+                color: var(--white);
+                -webkit-text-fill-color: var(--white);
             }
             .success-message p {
                 color: rgba(255,255,255,0.9);
