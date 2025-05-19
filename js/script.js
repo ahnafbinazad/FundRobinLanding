@@ -123,19 +123,13 @@ document.addEventListener('DOMContentLoaded', function() {
         item.classList.add('to-animate');
         item.style.animationDelay = `${0.1 + (index * 0.1)}s`;
         scrollObserver.observe(item);
-    });
-
-    // Form validation with enhanced feedback
+    });    // Form validation with enhanced feedback
     const signupForm = document.getElementById('signup-form');
     
     if (signupForm) {
         const emailField = document.getElementById('email');
         const organizationField = document.getElementById('organization');
-        
-        // Add input validation indicators
-        emailField.addEventListener('input', function() {
-            validateEmail(this);
-        });
+          // Remove real-time validation to prevent styling while typing
         
         function validateEmail(input) {
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -152,10 +146,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 return false;
             }
         }
-        
-        signupForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+          signupForm.addEventListener('submit', function(e) {
+            // We need to handle Google Form submission in a way that doesn't navigate away
+            e.preventDefault(); 
             
+            // First validate the email
             if (!validateEmail(emailField)) {
                 const errorMessage = document.createElement('div');
                 errorMessage.className = 'error-message';
@@ -177,30 +172,63 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Collect the form data
-            const formData = {
-                email: emailField.value,
-                organization: organizationField.value
-            };
+            // If form is valid, collect the data
+            const formData = new FormData(signupForm);
             
-            // Placeholder for API submission
-            console.log('Form submitted with data:', formData);
+            // Create a hidden iframe to submit the form without page navigation
+            let iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.name = 'hidden_iframe';
+            document.body.appendChild(iframe);
             
-            // Show success message
-            submitSuccess();
+            // Change the target of the form to the iframe
+            const originalTarget = signupForm.target;
+            signupForm.target = 'hidden_iframe';
+              // Show loading indicator
+            const submitButton = signupForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitButton.disabled = true;
+            
+            // Submit the form to Google Forms
+            signupForm.submit();
+            
+            // Show success message after a short delay to simulate processing
+            setTimeout(() => {
+                submitButton.innerHTML = originalButtonText;
+                submitButton.disabled = false;
+                submitSuccess();
+            }, 1500);
+              // Reset the form fields
+            signupForm.reset();
+            
+            // Remove any validation styling classes
+            emailField.classList.remove('valid', 'invalid');
+            organizationField.classList.remove('valid', 'invalid');
+            
+            // Reset form target back to original
+            setTimeout(() => {
+                signupForm.target = originalTarget;
+                // Remove the iframe after a delay to ensure submission completes
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                }, 5000);
+            }, 100);
+            
+            // Log the submission
+            console.log('Form submitted to Google Forms');
         });
     }
-    
-    // Add CSS for form validation
+      // Add CSS for form validation
     const validationStyle = document.createElement('style');
     validationStyle.textContent = `
         input.valid {
             border: 2px solid var(--success) !important;
-            background-color: rgba(56, 178, 172, 0.05) !important;
+            background-color: var(--white) !important;
         }
         input.invalid {
             border: 2px solid #e53e3e !important;
-            background-color: rgba(229, 62, 62, 0.05) !important;
+            background-color: var(--white) !important;
         }
         .error-message {
             color: #e53e3e;
@@ -253,13 +281,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
-    });
-
-    // Success message for form submission
+    });    // Success message for form submission
     function submitSuccess() {
-        // Create success message with enhanced styling
+        // Create a notification div for success message instead of replacing the form
         const successMessage = document.createElement('div');
-        successMessage.className = 'success-message';
+        successMessage.className = 'success-notification';
         successMessage.innerHTML = `
             <div class="success-icon">
                 <i class="fas fa-check-circle"></i>
@@ -268,17 +294,64 @@ document.addEventListener('DOMContentLoaded', function() {
             <p>You've been added to our early access list. We'll be in touch soon!</p>
         `;
         
-        // Replace form with success message
-        signupForm.innerHTML = '';
-        signupForm.appendChild(successMessage);
+        // Add the success notification to the body
+        document.body.appendChild(successMessage);
+          // Create a dark overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'success-overlay';
+        document.body.appendChild(overlay);
+        
+        // Make them appear with animation
+        setTimeout(() => {
+            overlay.classList.add('show');
+            successMessage.classList.add('show');
+        }, 100);
+        
+        // Remove them after 5 seconds
+        setTimeout(() => {
+            successMessage.classList.remove('show');
+            overlay.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(successMessage);
+                document.body.removeChild(overlay);
+            }, 500);
+        }, 5000);
         
         // Add styles for success message
         const style = document.createElement('style');
         style.textContent = `
-            .success-message {
+            .success-notification {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(0.8);
+                background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+                border-radius: 16px;
+                padding: 30px 40px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                z-index: 9999;
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 text-align: center;
-                padding: 20px;
-                animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+                max-width: 90%;
+                width: 400px;
+            }            .success-notification.show {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            .success-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.7);
+                z-index: 9998;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+            .success-overlay.show {
+                opacity: 1;
             }
             .success-icon {
                 font-size: 60px;
@@ -286,15 +359,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 margin-bottom: 20px;
                 animation: pulse 2s infinite;
             }
-            .success-message h3 {
+            .success-notification h3 {
                 font-size: 1.8rem;
                 margin-bottom: 12px;
                 color: var(--white);
                 -webkit-text-fill-color: var(--white);
             }
-            .success-message p {
+            .success-notification p {
                 color: rgba(255,255,255,0.9);
                 font-size: 1.1rem;
+                margin-bottom: 0;
             }
         `;
         document.head.appendChild(style);

@@ -141,8 +141,8 @@ section {
 }
 
 .btn-outline:hover {
-    background-color: var(--primary);
-    color: var(--white);
+    background-color: var(--white);
+    color: var(--primary);
     box-shadow: var(--shadow-sm);
 }
 
@@ -150,12 +150,13 @@ nav .btn {
     padding: 8px 20px; /* Reduced from 10px 24px */
     font-size: 14px; /* Slightly smaller font */
     margin: 0 8px; /* Add some margin on the sides */
+    white-space: nowrap;
 }
 
 /* Header Styles */
 header {
-    background-color: rgba(37, 88, 181, 0.1);
-    padding: 18px; /* Reduced from 12px to 8px to make it shorter */
+    background-color: rgba(37, 88, 181, 0.3);
+    padding: 18px 10px; /* Added horizontal padding */
     position: fixed;
     top: 0;
     left: 0;
@@ -176,12 +177,14 @@ nav {
     display: flex;
     align-items: center; /* This centers items vertically */
     /* height: 75%; Take full height of header */
+    flex-shrink: 0; /* Prevent navigation from shrinking */
 }
 
 header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .logo {
@@ -226,7 +229,7 @@ header .container {
     animation: gradientShift 15s ease infinite;
     color: var(--white);
     position: relative;
-    padding: 0; /* Remove padding */
+    padding: 0 0 40px 0; /* Add bottom padding */
     overflow: hidden;
     min-height: 100vh; /* Make it full viewport height */
     display: flex;
@@ -366,6 +369,7 @@ header .container {
     gap: 60px;
     align-items: center;
     padding-top: 80px; /* Add space for the navbar */
+    padding-bottom: 20px; /* Add some bottom padding */
 }
 
 .hero h1 {
@@ -393,6 +397,7 @@ header .container {
     border-radius: 16px;
     padding: 36px;
     margin-top: 36px;
+    margin-bottom: 20px; /* Add bottom margin for spacing */
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -416,7 +421,7 @@ header .container {
     border-radius: 50px;
     border: none;
     font-size: 16px;
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--white);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     transition: var(--transition-medium);
     letter-spacing: 0.01em;
@@ -1168,19 +1173,20 @@ footer p {
     }
     
     .hero .container {
-        padding-top: 100px; /* Increase top padding on mobile */
+        padding-top: 110px; /* Increase top padding on mobile */
         padding-bottom: 50px; /* Add some bottom padding */
-    }
-
-    .hero-image {
-        order: 1;
-        max-width: 80%;
-        margin: 0 auto;
+        grid-template-columns: 1fr; /* Change to single column */
     }
 
     .hero-content {
-        order: 2;
+        order: 1; /* Content first */
         text-align: center;
+    }
+    
+    .hero-image {
+        order: 2; /* Image second */
+        max-width: 80%;
+        margin: 0 auto;
     }
 
     .hero h1 {
@@ -1207,7 +1213,7 @@ footer p {
     }
 
     .hero {
-        padding: 140px 0 70px;
+        padding: 140px 0 70px; /* Maintain good bottom padding */
     }
 
     .hero h1 {
@@ -1259,9 +1265,19 @@ footer p {
     .hero h2 {
         font-size: 1.2rem;
     }
-
+    
     .hero-signup {
         padding: 20px;
+        margin-bottom: 30px; /* Increase bottom margin on small screens */
+    }
+    
+    /* Ensure hero components stack properly */
+    .hero .container {
+        gap: 25px;
+    }
+    
+    .hero-image {
+        margin-top: 10px;
     }
     
     .section-label {
@@ -1324,7 +1340,8 @@ footer p {
     }
     
     .hero .container {
-        gap: 40px;
+        gap: 30px;
+        padding: 0 15px;
     }
     
     .dashboard-wrapper {
@@ -1347,6 +1364,49 @@ footer p {
     
     .faq-item.active .faq-answer {
         padding: 18px 20px;
+    }
+    
+    /* Better header responsiveness for tiny screens */
+    header {
+        padding: 12px 8px;
+    }
+    
+    .logo h1 {
+        font-size: 16px;
+    }
+    
+    .logo i {
+        font-size: 20px;
+    }
+    
+    nav .btn {
+        padding: 6px 12px;
+        font-size: 12px;
+        margin: 0 4px;
+    }
+}
+
+/* Add iPhone SE specific styles */
+@media (max-width: 375px) {
+    .container {
+        padding: 0 10px;
+    }
+    
+    header .container {
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .logo {
+        margin-right: auto;
+    }
+    
+    .hero-signup {
+        padding: 15px;
+    }
+    
+    .hero h1 {
+        font-size: 1.4rem;
     }
 }
 
