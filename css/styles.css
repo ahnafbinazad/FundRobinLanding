@@ -155,7 +155,7 @@ nav .btn {
 /* Header Styles */
 header {
     background-color: rgba(37, 88, 181, 0.1);
-    padding: 12px 0; /* Reduced from 12px to 8px to make it shorter */
+    padding: 18px; /* Reduced from 12px to 8px to make it shorter */
     position: fixed;
     top: 0;
     left: 0;
